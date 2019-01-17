@@ -1,0 +1,27 @@
+server:
+	do-ip4: yes
+	do-ip6: yes
+	port: 53
+
+	zonesdir: "/etc/nsd/zones"
+
+	hide-version: yes
+	version: "NSD"
+
+remote-control:
+	control-enable: yes
+	control-interface: 127.0.0.1
+	control-interface: ::1
+	control-port: 8952
+
+	server-key-file: "/etc/nsd/nsd_server.key"
+	server-cert-file: "/etc/nsd/nsd_server.pem"
+
+	control-key-file: "/etc/nsd/nsd_control.key"
+	control-cert-file: "/etc/nsd/nsd_control.pem"
+
+{% for zone in zonelist %}
+zone:
+	name: "{{ zone }}"
+	zonefile: "/etc/nsd/zones/{{ zone }}.zone"
+{% endfor %}

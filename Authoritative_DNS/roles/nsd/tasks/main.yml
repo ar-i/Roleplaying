@@ -1,0 +1,13 @@
+---
+  - name: Bootstrap the system
+    raw: (test -e /usr/bin/python && test -d /etc/ca-certificates) || (apt -y update && apt install -y python-minimal python-apt ca-certificates)
+  - name: Install nsd
+    apt: name=nsd state=present update_cache=yes
+  - name: Copy config
+    template: src=nsd.conf.j2 dest=/etc/nsd/nsd.conf owner=root group=root mode=0400
+    notify:
+      - Restart nsd
+  - name: Copy zonefiles
+    file: path=/etc/nsd/zones state=directory owner=nsd group=nsd mode=0700
+  - template: src=zones/{{ item }}.zone dest=/etc/nsd/zones/{{ item }}.zone owner=nsd group=nsd mode=0400
+    loop: "{{ zonelist }}"
