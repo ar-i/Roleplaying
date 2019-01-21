@@ -1,0 +1,9 @@
+---
+- hosts: all
+  become: yes
+  become_method: su
+  gather_facts: no
+  roles:
+    - nginx
+    - smtp
+    - nextcloud-config

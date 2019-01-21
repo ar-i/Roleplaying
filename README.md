@@ -6,3 +6,4 @@ the rest of the world.
 Roles in this repository:
 
 * Authoritative DNS (Configures a machine running Debian as an authoritative nameserver through `nsd`, zonefiles can be managed with the role as well)
+* Nextcloud (Installs and preconfigures Nextcloud on a machine running Debian)

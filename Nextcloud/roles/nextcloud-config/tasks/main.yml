@@ -1,0 +1,29 @@
+---
+- block:
+    - name: Install Nextcloud
+      command: sudo -u www-data php occ maintenance:install --database "mysql" --database-name "{{ db_name }}" --database-user "{{ db_username }}" --database-pass "{{ db_password }}" --admin-user "{{ nextcloud_username }}" --admin-pass "{{ nextcloud_password }}" --data-dir "/var/www/nextcloud/data"
+      args:
+        creates: /var/www/nextcloud/config/config.php
+        chdir: /var/www/nextcloud
+      
+    - name: Set {{ hostname }} as trusted location
+      command: sudo -u www-data php occ config:system:set trusted_domains 0 --value=localhost
+      args:
+        chdir: /var/www/nextcloud
+
+    - command: sudo -u www-data php occ config:system:set trusted_domains 0 --value={{ hostname }}
+      args:
+        chdir: /var/www/nextcloud
+    
+    - name: Set the local mailserver as default for Nextcloud
+      command: sudo -u www-data php occ config:system:set mail_domain --value={{ hostname }}
+      args:
+        chdir: /var/www/nextcloud
+
+    - command: sudo -u www-data php occ config:system:set mail_from_address --value=noreply
+      args:
+        chdir: /var/www/nextcloud
+
+    - command: sudo -u www-data php occ config:system:set mail_smtphost --value=127.0.0.1:25
+      args:
+        chdir: /var/www/nextcloud
